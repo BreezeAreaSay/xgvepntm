@@ -1,0 +1,87 @@
+---
+import SoupScene from './SoupScene.astro';
+import { fillings } from '../data/menu';
+import { contacts } from '../data/contacts';
+---
+
+<section class="hero" id="top">
+  <div class="wrap hero__inner">
+    <div class="hero__text">
+      <p class="hero__eyebrow">张亮麻辣烫 · ZHANGLIANG</p>
+      <h1 class="display">
+        Джан Лян <span class="accent">Малатан</span>
+      </h1>
+      <p class="hero__lead">
+        Собираете блюдо сами: выбираете наполнители на вес, добавляете основу —
+        и получаете свою миску малатана. {fillings.pricePer100g} ₽ за 100 грамм.
+      </p>
+
+      <p class="hero__seating">
+        Свободная посадка — бронировать столик не нужно, приходите когда удобно.
+      </p>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#menu">Смотреть меню</a>
+        {
+          contacts.yandexEdaUrl && (
+            <a
+              class="btn btn--ghost"
+              href={contacts.yandexEdaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Заказать доставку
+            </a>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="hero__scene">
+      <SoupScene />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: clamp(2.5rem, 6vw, 5rem); }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .hero__eyebrow {
+    margin: 0 0 0.75rem;
+    color: var(--c-accent);
+    font-family: var(--font-display);
+    font-style: italic;
+    letter-spacing: 0.14em;
+    font-size: 0.9rem;
+  }
+
+  .hero__lead {
+    max-width: 46ch;
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    color: #d6d6d6;
+  }
+
+  .hero__seating {
+    display: inline-block;
+    margin: 0.5rem 0 0;
+    padding: 0.6rem 1rem;
+    border-left: 3px solid var(--c-accent);
+    background: var(--c-bg-elevated);
+    color: var(--c-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 1.75rem; }
+
+  @media (max-width: 860px) {
+    .hero__inner { grid-template-columns: 1fr; }
+    .hero__scene { order: -1; }
+  }
+</style>

@@ -1,0 +1,38 @@
+---
+import type { SpiceLevel } from '../data/menu';
+
+type Props = { level: SpiceLevel };
+const { level } = Astro.props;
+
+const labels: Record<SpiceLevel, string> = {
+  0: 'не острое',
+  1: 'слабо острое',
+  2: 'острое',
+  3: 'очень острое',
+};
+---
+
+{
+  level > 0 && (
+    <span class="spice" title={labels[level]}>
+      <span class="visually-hidden">Острота: {labels[level]}</span>
+      {Array.from({ length: level }).map(() => (
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+          <path
+            d="M14.5 3c.6 1.2.3 2.3-.5 3 2.6.4 4.6 2.4 5.3 5.1.9 3.6-1 7.5-4.6 9.3-3 1.5-6.6.9-8.9-1.4-.5-.5-.1-1.3.6-1.2 3.4.5 6.4-1 8-3.7 1.3-2.3 1.2-5-.2-7.2-.6-.9-.4-2.1.4-2.8.7-.6 1.7-.5 2.3.2Z"
+            fill="currentColor"
+          />
+        </svg>
+      ))}
+    </span>
+  )
+}
+
+<style>
+  .spice {
+    display: inline-flex;
+    gap: 1px;
+    color: var(--c-accent);
+    vertical-align: middle;
+  }
+</style>

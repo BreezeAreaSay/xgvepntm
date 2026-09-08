@@ -1,0 +1,114 @@
+---
+import { reviews, averageRating } from '../data/reviews';
+import { contacts } from '../data/contacts';
+
+const average = averageRating(reviews);
+---
+
+<section class="reviews" id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="display">Отзывы</h2>
+      <p>
+        Отзывы гостей — без имён и личных данных. Полная картина, включая
+        критику, доступна в первоисточнике на Яндекс Картах.
+      </p>
+    </div>
+
+    {
+      average !== null && (
+        <p class="reviews__average">
+          <strong>{average}</strong>
+          <span>средняя оценка по {reviews.length} отзывам</span>
+        </p>
+      )
+    }
+
+    {
+      reviews.length > 0 ? (
+        <ul class="reviews__grid" role="list">
+          {reviews.map((review) => (
+            <li class="review">
+              <p class="review__rating" aria-label={`Оценка ${review.rating} из 5`}>
+                <span aria-hidden="true">{'★'.repeat(review.rating)}</span>
+                <span class="review__rating-dim" aria-hidden="true">
+                  {'★'.repeat(5 - review.rating)}
+                </span>
+              </p>
+              <blockquote class="review__text">{review.text}</blockquote>
+              <p class="review__period">Гость · {review.period}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="todo-note">
+          Отзывы намеренно не заполнены: выдуманный отзыв, поданный как настоящий, —
+          это обман гостя. Перенесите реальные отзывы из Яндекс Карт в
+          <code>src/data/reviews.ts</code>, убрав имена и личные детали.
+        </p>
+      )
+    }
+
+    {
+      contacts.yandexMapsUrl && (
+        <a
+          class="btn btn--ghost reviews__link"
+          href={contacts.yandexMapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Все отзывы на Яндекс Картах
+          <span class="visually-hidden">(откроется в новой вкладке)</span>
+        </a>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .reviews__average {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 0 0 1.5rem;
+  }
+  .reviews__average strong {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 2.5rem;
+    color: var(--c-accent);
+  }
+  .reviews__average span { color: var(--c-text-muted); font-size: 0.95rem; }
+
+  .reviews__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    gap: clamp(0.85rem, 2vw, 1.4rem);
+    margin: 0 0 2rem;
+    padding: 0;
+  }
+
+  .review {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.25rem;
+    background: var(--c-bg-elevated);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+  }
+
+  .review__rating { margin: 0; color: var(--c-accent); letter-spacing: 0.1em; }
+  .review__rating-dim { color: var(--c-border); }
+
+  .review__text {
+    margin: 0;
+    font-style: italic;
+    color: #e0e0e0;
+    flex: 1;
+  }
+
+  .review__period { margin: 0; color: var(--c-text-muted); font-size: 0.82rem; }
+
+  .reviews__link { margin-top: 1.5rem; }
+</style>

@@ -1,0 +1,82 @@
+---
+import type { MenuItem } from '../data/menu';
+import Spice from './Spice.astro';
+
+type Props = { item: MenuItem };
+const { item } = Astro.props;
+
+const priceLabel = item.isSurcharge ? `+${item.price} ₽` : `${item.price} ₽`;
+---
+
+<li class="card">
+  <div class="card__media">
+    {
+      item.image ? (
+        <img src={item.image} alt={item.title} width="480" height="360" loading="lazy" decoding="async" />
+      ) : (
+        <div class="card__placeholder" aria-hidden="true">
+          <span>{item.titleZh}</span>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="card__body">
+    <h3 class="display card__title">
+      {item.title}
+      <Spice level={item.spice} />
+    </h3>
+    <p class="card__zh" lang="zh">{item.titleZh}</p>
+    {item.note && <p class="card__note">{item.note}</p>}
+    <p class="card__price">{priceLabel}</p>
+  </div>
+</li>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--c-bg-elevated);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    overflow: clip;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .card:hover {
+    border-color: var(--c-accent);
+    transform: translateY(-3px);
+  }
+
+  .card__media { aspect-ratio: 4 / 3; background: var(--c-surface); }
+  .card__media img { width: 100%; height: 100%; object-fit: cover; }
+
+  .card__placeholder {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    background:
+      radial-gradient(circle at 50% 40%, rgba(255, 74, 15, 0.22), transparent 62%),
+      var(--c-surface);
+    color: var(--c-accent);
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    letter-spacing: 0.08em;
+  }
+
+  .card__body { padding: 1rem 1.15rem 1.25rem; display: flex; flex-direction: column; gap: 0.3rem; flex: 1; }
+
+  .card__title { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+
+  .card__zh { margin: 0; color: var(--c-text-muted); font-size: 0.95rem; }
+
+  .card__note { margin: 0.25rem 0 0; color: var(--c-text-muted); font-size: 0.85rem; }
+
+  .card__price {
+    margin: auto 0 0;
+    padding-top: 0.7rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.35rem;
+    color: var(--c-accent);
+  }
+</style>

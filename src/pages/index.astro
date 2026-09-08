@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Menu from '../components/Menu.astro';
+import Delivery from '../components/Delivery.astro';
+import Reviews from '../components/Reviews.astro';
+import Contacts from '../components/Contacts.astro';
+import Footer from '../components/Footer.astro';
+import { contacts } from '../data/contacts';
+import { fillings } from '../data/menu';
+
+const title = contacts.city
+  ? `Джан Лян Малатан — китайский малатан в ${contacts.city}`
+  : 'Джан Лян Малатан — китайский малатан';
+
+const description =
+  `Малатан на вес: ${fillings.pricePer100g} ₽ за 100 грамм наполнителей, ` +
+  'пять видов бульона, блюда на воке. Свободная посадка, доставка через Яндекс Еду.';
+---
+
+<Base title={title} description={description}>
+  <Header />
+  <main id="main">
+    <Hero />
+    <Menu />
+    <Delivery />
+    <Reviews />
+    <Contacts />
+  </main>
+  <Footer />
+</Base>

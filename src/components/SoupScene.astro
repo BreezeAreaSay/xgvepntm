@@ -1,0 +1,150 @@
+---
+/**
+ * 3D-остров. Единственный интерактивный JS на странице.
+ *
+ * Скрипт не грузится, пока блок не подъехал к экрану:
+ * IntersectionObserver ловит приближение и делает динамический import(),
+ * который Vite выносит в отдельный чанк. До этого момента пользователь
+ * видит статичную заглушку, и Three.js по сети не идёт вообще.
+ */
+---
+
+<div class="soup" data-soup>
+  <canvas class="soup__canvas" data-soup-canvas aria-hidden="true"></canvas>
+
+  <div class="soup__poster" data-soup-poster>
+    <div class="soup__bowl" aria-hidden="true"></div>
+  </div>
+
+  <p class="soup__hint" data-soup-hint hidden>Потяните, чтобы повернуть</p>
+</div>
+
+<style>
+  .soup {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    max-width: 34rem;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .soup__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .soup__canvas[data-ready] { opacity: 1; }
+
+  /* Заглушка: чистый CSS, рисуется мгновенно, вес — ноль. */
+  .soup__poster {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transition: opacity 0.5s ease;
+  }
+  .soup__poster[data-hidden] { opacity: 0; pointer-events: none; }
+
+  .soup__bowl {
+    width: 62%;
+    aspect-ratio: 1 / 1;
+    border-radius: 46% 46% 50% 50% / 38% 38% 62% 62%;
+    background:
+      radial-gradient(circle at 50% 32%, var(--c-accent-hot) 0%, var(--c-accent) 38%, var(--c-accent-dim) 78%);
+    box-shadow: 0 0 70px rgba(255, 74, 15, 0.35);
+  }
+
+  .soup__hint {
+    position: absolute;
+    left: 50%;
+    bottom: 0.5rem;
+    transform: translateX(-50%);
+    margin: 0;
+    color: var(--c-text-muted);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .soup__canvas, .soup__poster { transition: none; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-soup]');
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-soup-canvas]');
+  const poster = document.querySelector<HTMLElement>('[data-soup-poster]');
+  const hint = document.querySelector<HTMLElement>('[data-soup-hint]');
+
+  // strictNullChecks: querySelector может вернуть null, проверяем явно.
+  if (root && canvas && poster) {
+    /** Нет WebGL — остаёмся на CSS-заглушке, ошибок в консоли не будет. */
+    function hasWebGL(): boolean {
+      try {
+        return Boolean(document.createElement('canvas').getContext('webgl2'));
+      } catch {
+        return false;
+      }
+    }
+
+    /**
+     * Экономный режим: при включённой экономии трафика или на 2G/3G
+     * мы вообще не тянем Three.js — гость видит CSS-заглушку.
+     * 134 КБ ради декорации не стоят пяти секунд ожидания меню.
+     */
+    function prefersLightweight(): boolean {
+      const connection = (
+        navigator as Navigator & {
+          connection?: { saveData?: boolean; effectiveType?: string };
+        }
+      ).connection;
+      if (!connection) return false;
+      if (connection.saveData === true) return true;
+      const slow = ['slow-2g', '2g', '3g'];
+      return typeof connection.effectiveType === 'string'
+        && slow.includes(connection.effectiveType);
+    }
+
+    /** Ждём, пока браузер освободится: 3D не должен конкурировать с первой отрисовкой. */
+    function whenIdle(callback: () => void): void {
+      const idle = (
+        window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }
+      ).requestIdleCallback;
+      if (typeof idle === 'function') idle(callback, { timeout: 2500 });
+      else window.setTimeout(callback, 900);
+    }
+
+    async function mount(): Promise<void> {
+      try {
+        // Динамический import: Three.js уходит в отдельный чанк
+        // и запрашивается только здесь.
+        const { initSoupScene } = await import('../scripts/soup');
+        initSoupScene(canvas!);
+        canvas!.dataset.ready = 'true';
+        poster!.dataset.hidden = 'true';
+        if (hint) hint.hidden = false;
+      } catch (error) {
+        console.error('Не удалось запустить 3D-сцену:', error);
+      }
+    }
+
+    if (hasWebGL() && !prefersLightweight()) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          if (!entry?.isIntersecting) return;
+          observer.disconnect();
+          // Два условия вместе: блок рядом с экраном И браузер не занят.
+          whenIdle(() => void mount());
+        },
+        // Начинаем за 300px до появления — к моменту прокрутки сцена готова.
+        { rootMargin: '300px' },
+      );
+
+      observer.observe(root);
+    }
+  }
+</script>

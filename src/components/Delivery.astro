@@ -1,0 +1,63 @@
+---
+import { contacts } from '../data/contacts';
+---
+
+<section class="delivery" id="delivery">
+  <div class="wrap delivery__inner">
+    <div>
+      <h2 class="display">Доставка</h2>
+      <p class="delivery__lead">
+        Заказ на дом — через Яндекс Еду. Оформление, оплата и курьер полностью
+        на стороне сервиса.
+      </p>
+      <p class="delivery__note">
+        Упаковка для заказа с собой в зале — 100 ₽.
+      </p>
+    </div>
+
+    {
+      contacts.yandexEdaUrl ? (
+        <a
+          class="btn btn--primary delivery__cta"
+          href={contacts.yandexEdaUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Открыть в Яндекс Еде
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+            <path
+              d="M7 17 17 7M17 7H9m8 0v8"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+          </svg>
+          <span class="visually-hidden">(откроется в новой вкладке)</span>
+        </a>
+      ) : (
+        <p class="todo-note">
+          Ссылка на Яндекс Еду не заполнена. Добавьте её в
+          <code>src/data/contacts.ts</code> → <code>yandexEdaUrl</code>, и кнопка появится.
+        </p>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .delivery { background: var(--c-bg-elevated); border-block: 1px solid var(--c-border); }
+
+  .delivery__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(1.25rem, 4vw, 3rem);
+  }
+
+  .delivery__lead { max-width: 44ch; color: #d6d6d6; margin-bottom: 0.5rem; }
+  .delivery__note { margin: 0; color: var(--c-text-muted); font-size: 0.9rem; }
+  .delivery__cta { flex-shrink: 0; }
+</style>

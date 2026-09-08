@@ -1,0 +1,112 @@
+---
+import { menu, fillings, takeawayPackaging } from '../data/menu';
+import MenuCard from './MenuCard.astro';
+---
+
+<section class="menu" id="menu">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="display">Меню <span class="accent">малатан</span></h2>
+      <p>
+        Малатан собирается в два шага: набираете наполнители на вес, затем
+        выбираете основу. Цена основы — доплата к весу.
+      </p>
+    </div>
+
+    <!-- Главная цифра меню: выносим её отдельным блоком, а не строкой в списке. -->
+    <div class="fillings">
+      <div>
+        <p class="fillings__label">Наполнители и ингредиенты</p>
+        <p class="fillings__zh" lang="zh">{fillings.titleZh}</p>
+      </div>
+      <p class="fillings__price">
+        <strong>{fillings.pricePer100g} ₽</strong>
+        <span>/ 100 грамм</span>
+      </p>
+    </div>
+
+    {
+      menu.map((section) => (
+        <div class="menu__section">
+          <div class="menu__head">
+            <h3 class="display menu__title">{section.title}</h3>
+            {section.subtitle && <p class="menu__subtitle">{section.subtitle}</p>}
+          </div>
+          <ul class="menu__grid" role="list">
+            {section.items.map((item) => (
+              <MenuCard item={item} />
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+
+    <p class="menu__note">
+      Упаковка для заказа с собой — {takeawayPackaging.price} ₽.
+      Цены указаны в рублях и могут отличаться от актуальных в зале.
+    </p>
+  </div>
+</section>
+
+<style>
+  .fillings {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: clamp(1.1rem, 3vw, 1.75rem);
+    margin-bottom: clamp(2rem, 5vw, 3.25rem);
+    background: var(--c-accent);
+    border-radius: var(--radius);
+    color: #000;
+  }
+
+  .fillings__label {
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+  }
+
+  .fillings__zh { margin: 0.15rem 0 0; font-size: 0.95rem; opacity: 0.75; }
+
+  .fillings__price {
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    font-family: var(--font-display);
+    font-style: italic;
+  }
+  .fillings__price strong { font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 900; }
+  .fillings__price span { font-size: 1rem; opacity: 0.8; }
+
+  .menu__section { margin-bottom: clamp(2.25rem, 5vw, 3.5rem); }
+
+  .menu__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    padding-bottom: 0.6rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 2px solid var(--c-accent);
+  }
+
+  .menu__title { font-size: clamp(1.35rem, 3.5vw, 2rem); }
+
+  .menu__subtitle { margin: 0; color: var(--c-text-muted); font-size: 0.92rem; }
+
+  .menu__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr));
+    gap: clamp(0.85rem, 2vw, 1.4rem);
+    margin: 0;
+    padding: 0;
+  }
+
+  .menu__note { color: var(--c-text-muted); font-size: 0.88rem; }
+</style>

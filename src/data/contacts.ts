@@ -47,7 +47,8 @@ export const contacts: Contacts = {
   address: TODO,            // например: 'ул. Примерная, 1'
   phone: TODO,              // например: '+7 999 000-00-00'
 
-  yandexMapsUrl: TODO,      // https://yandex.ru/maps/org/.../
+  // Подтверждено владельцем: точка на просп. Вернадского, 105к4 (м. Юго-Западная).
+  yandexMapsUrl: 'https://yandex.ru/maps/org/dzhan_lyan_malatan/13436227398/',
   yandexMapEmbedUrl: TODO,  // https://yandex.ru/map-widget/v1/?...
   yandexEdaUrl: TODO,       // https://eda.yandex.ru/restaurant/...
 

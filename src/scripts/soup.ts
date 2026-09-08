@@ -83,13 +83,16 @@ type Bobbing = {
 function createBowl(): Group {
   const group = new Group();
 
+  // Первая точка на оси (x = 0) замыкает дно: без неё миска
+  // просвечивает снизу, а её основание читается как шип.
   const profile = [
+    new Vector2(0.00, 0.00),
     new Vector2(0.30, 0.00),
-    new Vector2(0.38, 0.04),
-    new Vector2(0.62, 0.22),
-    new Vector2(0.88, 0.46),
-    new Vector2(1.00, 0.58),
-    new Vector2(0.99, 0.62),
+    new Vector2(0.44, 0.06),
+    new Vector2(0.68, 0.25),
+    new Vector2(0.92, 0.47),
+    new Vector2(1.00, 0.56),
+    new Vector2(0.99, 0.60),
   ];
 
   const wall = new Mesh(
@@ -116,13 +119,6 @@ function createBowl(): Group {
   );
   group.add(inner);
 
-  const foot = new Mesh(
-    new CylinderGeometry(0.34, 0.30, 0.06, 8),
-    new MeshStandardMaterial({ color: 0x111111, roughness: 0.8, flatShading: true }),
-  );
-  foot.position.y = -0.03;
-  group.add(foot);
-
   return group;
 }
 
@@ -135,18 +131,18 @@ function createBroth(): Mesh {
       roughness: 0.18,
       metalness: 0.1,
       emissive: new Color(PALETTE.brothGlow),
-      emissiveIntensity: 0.35,
+      emissiveIntensity: 0.2,
     }),
   );
   broth.rotation.x = -Math.PI / 2;
-  broth.position.y = 0.5;
+  broth.position.y = 0.48;
   return broth;
 }
 
 /** Ломтик лотоса. */
 function createLotus(): Mesh {
   return new Mesh(
-    new CylinderGeometry(0.14, 0.14, 0.028, 12),
+    new CylinderGeometry(0.16, 0.16, 0.03, 12),
     new MeshStandardMaterial({ color: PALETTE.lotus, roughness: 0.6, flatShading: true }),
   );
 }
@@ -155,11 +151,11 @@ function createLotus(): Mesh {
 function createMushroom(): Group {
   const g = new Group();
   const cap = new Mesh(
-    new SphereGeometry(0.1, 10, 7, 0, Math.PI * 2, 0, Math.PI / 2),
+    new SphereGeometry(0.115, 10, 7, 0, Math.PI * 2, 0, Math.PI / 2),
     new MeshStandardMaterial({ color: PALETTE.mushroom, roughness: 0.65, flatShading: true }),
   );
   const stem = new Mesh(
-    new CylinderGeometry(0.035, 0.04, 0.09, 8),
+    new CylinderGeometry(0.04, 0.045, 0.1, 8),
     new MeshStandardMaterial({ color: 0xe8d9bd, roughness: 0.7, flatShading: true }),
   );
   stem.position.y = -0.045;
@@ -170,7 +166,7 @@ function createMushroom(): Group {
 /** Кусочек кукурузы. */
 function createCorn(): Mesh {
   const corn = new Mesh(
-    new CylinderGeometry(0.075, 0.075, 0.15, 10),
+    new CylinderGeometry(0.085, 0.085, 0.17, 10),
     new MeshStandardMaterial({ color: PALETTE.corn, roughness: 0.5, flatShading: true }),
   );
   corn.rotation.z = Math.PI / 2;
@@ -187,7 +183,7 @@ function createGreens(): Group {
     flatShading: true,
   });
   for (let i = 0; i < 2; i += 1) {
-    const leaf = new Mesh(new PlaneGeometry(0.22, 0.13), material);
+    const leaf = new Mesh(new PlaneGeometry(0.26, 0.15), material);
     leaf.rotation.set(-Math.PI / 2.4, 0, (i * Math.PI) / 2.5);
     g.add(leaf);
   }
@@ -197,7 +193,7 @@ function createGreens(): Group {
 /** Завиток лапши. */
 function createNoodle(): Mesh {
   const noodle = new Mesh(
-    new TorusGeometry(0.13, 0.022, 6, 14),
+    new TorusGeometry(0.15, 0.025, 6, 14),
     new MeshStandardMaterial({ color: PALETTE.noodle, roughness: 0.55, flatShading: true }),
   );
   noodle.rotation.x = -Math.PI / 2.2;
@@ -207,7 +203,7 @@ function createNoodle(): Mesh {
 /** Креветка. */
 function createShrimp(): Mesh {
   const shrimp = new Mesh(
-    new CapsuleGeometry(0.045, 0.1, 3, 8),
+    new CapsuleGeometry(0.052, 0.11, 3, 8),
     new MeshStandardMaterial({ color: PALETTE.shrimp, roughness: 0.4, flatShading: true }),
   );
   shrimp.rotation.set(Math.PI / 2, 0, Math.PI / 5);
@@ -238,7 +234,7 @@ function createSteamTexture(): CanvasTexture {
 }
 
 const STEAM_COUNT = 70;
-const STEAM_TOP = 1.9;
+const STEAM_TOP = 1.45;
 
 function createSteam(texture: CanvasTexture): { points: Points; speeds: Float32Array } {
   const positions = new Float32Array(STEAM_COUNT * 3);
@@ -246,11 +242,11 @@ function createSteam(texture: CanvasTexture): { points: Points; speeds: Float32A
 
   for (let i = 0; i < STEAM_COUNT; i += 1) {
     const angle = Math.random() * Math.PI * 2;
-    const radius = Math.random() * 0.6;
+    const radius = Math.random() * 0.42;
     positions[i * 3] = Math.cos(angle) * radius;
     positions[i * 3 + 1] = 0.55 + Math.random() * (STEAM_TOP - 0.55);
     positions[i * 3 + 2] = Math.sin(angle) * radius;
-    speeds[i] = 0.09 + Math.random() * 0.14;
+    speeds[i] = 0.07 + Math.random() * 0.1;
   }
 
   const geometry = new BufferGeometry();
@@ -259,12 +255,12 @@ function createSteam(texture: CanvasTexture): { points: Points; speeds: Float32A
   const points = new Points(
     geometry,
     new PointsMaterial({
-      size: 0.3,
+      size: 0.17,
       map: texture,
       transparent: true,
       depthWrite: false,
       blending: AdditiveBlending,
-      opacity: 0.75,
+      opacity: 0.45,
     }),
   );
 
@@ -292,9 +288,9 @@ export function initSoupScene(canvas: HTMLCanvasElement): SoupScene {
 
   const scene = new Scene();
 
-  const camera = new PerspectiveCamera(38, 1, 0.1, 100);
-  camera.position.set(0, 1.75, 3.15);
-  camera.lookAt(0, 0.45, 0);
+  const camera = new PerspectiveCamera(34, 1, 0.1, 100);
+  camera.position.set(0, 1.02, 3.45);
+  camera.lookAt(0, 0.38, 0);
 
   scene.add(new AmbientLight(0xffffff, 0.55));
 
@@ -307,8 +303,8 @@ export function initSoupScene(canvas: HTMLCanvasElement): SoupScene {
   scene.add(rim);
 
   // Свет изнутри миски — бульон как будто светится.
-  const glow = new PointLight(PALETTE.brothGlow, 2.4, 3.2, 2);
-  glow.position.set(0, 0.62, 0);
+  const glow = new PointLight(PALETTE.brothGlow, 1.15, 2.3, 2);
+  glow.position.set(0, 0.78, 0);
   scene.add(glow);
 
   // Группа, которую вращает пользователь.
@@ -375,8 +371,8 @@ export function initSoupScene(canvas: HTMLCanvasElement): SoupScene {
 
   let targetRotationY = -0.35;
   let currentRotationY = -0.35;
-  let targetTiltX = 0;
-  let currentTiltX = 0;
+  let targetTiltX = 0.14;
+  let currentTiltX = 0.14;
   let dragging = false;
   let lastPointerX = 0;
   let lastPointerY = 0;
@@ -454,7 +450,7 @@ export function initSoupScene(canvas: HTMLCanvasElement): SoupScene {
     }
     steamPositions.needsUpdate = true;
 
-    glow.intensity = 2.2 + Math.sin(clock.elapsed * 2.1) * 0.35;
+    glow.intensity = 1.1 + Math.sin(clock.elapsed * 2.1) * 0.16;
 
     renderer.render(scene, camera);
   }

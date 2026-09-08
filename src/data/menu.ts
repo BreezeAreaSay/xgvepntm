@@ -10,7 +10,10 @@
 export type SpiceLevel = 0 | 1 | 2 | 3;
 
 export type MenuItem = {
-  /** Уникальный id — используется как ключ и как якорь. */
+  /**
+   * Уникальный id. Он же имя файла с фотографией:
+   * положите `src/assets/menu/<id>.jpg` — фото подхватится само.
+   */
   id: string;
   /** Название на русском. */
   title: string;
@@ -21,8 +24,6 @@ export type MenuItem = {
   /** true — цена указана как доплата («+60 руб») к весу наполнителей. */
   isSurcharge: boolean;
   spice: SpiceLevel;
-  /** Путь к фото в /public/menu/. null — фото ещё не добавлено. */
-  image: string | null;
   /** Короткое пояснение для гостя. Необязательно. */
   note?: string;
 };
@@ -44,7 +45,6 @@ const broths: MenuItem[] = [
     price: 60,
     isSurcharge: true,
     spice: 1,
-    image: null,
   },
   {
     id: 'tomato',
@@ -53,7 +53,6 @@ const broths: MenuItem[] = [
     price: 80,
     isSurcharge: true,
     spice: 0,
-    image: null,
   },
   {
     id: 'mushroom',
@@ -62,7 +61,6 @@ const broths: MenuItem[] = [
     price: 80,
     isSurcharge: true,
     spice: 0,
-    image: null,
   },
   {
     id: 'tom-yam',
@@ -71,7 +69,6 @@ const broths: MenuItem[] = [
     price: 80,
     isSurcharge: true,
     spice: 2,
-    image: null,
   },
   {
     id: 'hot-sour',
@@ -80,7 +77,6 @@ const broths: MenuItem[] = [
     price: 80,
     isSurcharge: true,
     spice: 2,
-    image: null,
   },
 ];
 
@@ -93,7 +89,6 @@ const dishes: MenuItem[] = [
     price: 200,
     isSurcharge: true,
     spice: 1,
-    image: null,
   },
   {
     id: 'mala-ban',
@@ -102,7 +97,6 @@ const dishes: MenuItem[] = [
     price: 200,
     isSurcharge: true,
     spice: 2,
-    image: null,
   },
   {
     id: 'mala-syangu',
@@ -111,7 +105,6 @@ const dishes: MenuItem[] = [
     price: 300,
     isSurcharge: true,
     spice: 3,
-    image: null,
     note: 'В стоимость включена порция риса',
   },
 ];
@@ -125,7 +118,6 @@ const sides: MenuItem[] = [
     price: 100,
     isSurcharge: false,
     spice: 0,
-    image: null,
   },
 ];
 

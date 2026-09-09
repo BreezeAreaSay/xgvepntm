@@ -10,8 +10,11 @@ import Footer from '../components/Footer.astro';
 import { contacts } from '../data/contacts';
 import { fillings } from '../data/menu';
 
-const title = contacts.city
-  ? `Джан Лян Малатан — китайский малатан в ${contacts.city}`
+// Заголовок берёт город в предложном падеже. Если его не заполнили —
+// город из заголовка выпадает целиком. Лучше без города, чем с ошибкой:
+// title видно и во вкладке, и в выдаче поисковика.
+const title = contacts.cityIn
+  ? `Джан Лян Малатан — китайский малатан в ${contacts.cityIn}`
   : 'Джан Лян Малатан — китайский малатан';
 
 const description =

@@ -1,9 +1,11 @@
 ---
 import { contacts, phoneHref } from '../data/contacts';
 
+// Пункт «Доставка» показывается только когда есть сам раздел:
+// ссылка на якорь, которого нет на странице, никуда не ведёт.
 const links = [
   { href: '#menu', label: 'Меню' },
-  { href: '#delivery', label: 'Доставка' },
+  ...(contacts.yandexEdaUrl ? [{ href: '#delivery', label: 'Доставка' }] : []),
   { href: '#reviews', label: 'Отзывы' },
   { href: '#contacts', label: 'Контакты' },
 ];

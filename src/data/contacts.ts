@@ -56,19 +56,21 @@ export const contacts: Contacts = {
   cityIn: 'Москве',   // «малатан в Москве»
   // Подтверждено владельцем.
   address: 'проспект Вернадского, 105к4',
-  phone: TODO,              // например: '+7 999 000-00-00'
+  phone: '+7 902 305-05-06',
 
   // Подтверждено владельцем: точка на просп. Вернадского, 105к4 (м. Юго-Западная).
   yandexMapsUrl: 'https://yandex.ru/maps/org/dzhan_lyan_malatan/13436227398/',
   yandexMapEmbedUrl: TODO,  // https://yandex.ru/map-widget/v1/?...
-  yandexEdaUrl: TODO,       // https://eda.yandex.ru/restaurant/...
+  // Доставки пока нет. Пока здесь null, раздел «Доставка» и обе кнопки
+  // заказа не показываются — появится ссылка, появятся и они.
+  yandexEdaUrl: TODO,
 
   socials: [
     // { label: 'Telegram', url: 'https://t.me/...' },
   ],
 
   workingHours: [
-    // { days: 'Пн–Вс', hours: '11:00 – 22:00' },
+    { days: 'Ежедневно', hours: '10:00 – 22:00' },
   ],
 };
 

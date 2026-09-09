@@ -27,7 +27,9 @@ const description =
   <main id="main">
     <Hero />
     <Menu />
-    <Delivery />
+    {/* Доставки пока нет: без ссылки на Яндекс Еду раздел не рендерится
+        вовсе — гостю нечего показать, а пустой блок хуже его отсутствия. */}
+    {contacts.yandexEdaUrl && <Delivery />}
     <Reviews />
     <Contacts />
   </main>

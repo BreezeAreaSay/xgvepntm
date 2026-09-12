@@ -60,7 +60,14 @@ export const contacts: Contacts = {
 
   // Подтверждено владельцем: точка на просп. Вернадского, 105к4 (м. Юго-Западная).
   yandexMapsUrl: 'https://yandex.ru/maps/org/dzhan_lyan_malatan/13436227398/',
-  yandexMapEmbedUrl: TODO,  // https://yandex.ru/map-widget/v1/?...
+  // Карта из конструктора Яндекса, точка подтверждена владельцем.
+  // Владелец прислал код в виде <script>; здесь iframe-вариант той же
+  // карты — у обоих общий идентификатор um, различается только способ
+  // вставки. Почему iframe: скрипт вставляет карту фиксированным
+  // размером 514×343 и тянет на страницу API Яндекс Карт при каждой
+  // загрузке. iframe тянется по ширине блока и грузится лениво.
+  yandexMapEmbedUrl:
+    'https://yandex.ru/map-widget/v1/?um=constructor%3A8ff3dc85227f8d9f3da13907ae4ea7b5493b55e02ccdf67729cdd8971129d90b&source=constructor',
   // Доставки пока нет. Пока здесь null, раздел «Доставка» и обе кнопки
   // заказа не показываются — появится ссылка, появятся и они.
   yandexEdaUrl: TODO,
